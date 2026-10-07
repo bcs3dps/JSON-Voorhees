@@ -1,9 +1,8 @@
 # Voorhees 2.5.0
 
 **A hierarchical editor for JSON, INI, Klipper-family config and registry (.reg) files, for Windows.**
-("Jason" Voorhees; JSON. Get it?)
 
-*"This JSON app is a real killer."*
+*"A really killer JSON app."*
 
 Copyright (c) 2026 B. C. Services. Licensed under the GNU General Public License, version 2 or (at your option) any later version -- see [LICENSE](LICENSE) and [GPL-2.0.txt](GPL-2.0.txt).
 
