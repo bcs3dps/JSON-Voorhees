@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Voorhees 2.5.0</title>
+<style>
+
+body { font-family: Arial, sans-serif; font-size: 11pt; margin: 1in;
+       line-height: 1.4; max-width: 7.5in; color: #1a1a1a; }
+h1 { font-size: 18pt; color: #1a1a1a; border-bottom: 2px solid #333;
+     padding-bottom: 4pt; margin-top: 24pt; }
+h1:first-child { margin-top: 0; }
+h2 { font-size: 14pt; color: #1a1a1a; margin-top: 22pt;
+     border-bottom: 1px solid #999; padding-bottom: 2pt; }
+h3 { font-size: 12pt; color: #333; margin-top: 16pt; }
+h4 { font-size: 11pt; color: #333; margin-top: 12pt; margin-bottom: 4pt; }
+p  { margin: 6pt 0; }
+pre { background-color: #f0f0f0; border: 1px solid #ccc; padding: 8pt;
+      font-family: Consolas, monospace; font-size: 9.5pt; white-space: pre;
+      overflow-x: auto; line-height: 1.25; }
+code { font-family: Consolas, monospace; font-size: 10pt;
+       background-color: #f0f0f0; padding: 1pt 3pt; border-radius: 2px; }
+pre code { background-color: transparent; padding: 0; font-size: 9.5pt; }
+p.note, div.note { background-color: #fff3cd; border-left: 4px solid #ffc107;
+                   padding: 6pt 10pt; margin: 8pt 0; }
+p.important, div.important { background-color: #f8d7da;
+                             border-left: 4px solid #dc3545;
+                             padding: 6pt 10pt; margin: 8pt 0; }
+p.summary, div.summary { background-color: #d1ecf1;
+                         border-left: 4px solid #0c5460;
+                         padding: 6pt 10pt; margin: 8pt 0; }
+ul, ol { margin-top: 4pt; margin-bottom: 8pt; }
+li { margin-bottom: 4pt; }
+li > ul, li > ol { margin-top: 4pt; margin-bottom: 4pt; }
+/* Indented outline body. Use in markdown as:
+   <div class="indent" markdown="1"> ...markdown incl. code fences... </div>
+   (the md_in_html extension processes markdown inside the div). */
+div.indent { margin: 4pt 0 8pt 2em; }
+div.indent > :first-child { margin-top: 0; }
+div.indent > :last-child  { margin-bottom: 0; }
+table { border-collapse: collapse; margin: 10pt 0; width: 100%; }
+td, th { border: 1px solid #999; padding: 4pt 8pt; font-size: 10pt;
+         vertical-align: top; }
+th { background-color: #e0e0e0; text-align: left; }
+tr:nth-child(even) td { background-color: #f7f7f7; }
+a  { color: #1e3a8a; text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid #999; margin: 16pt 0; }
+strong { color: #1a1a1a; }
+img { max-width: 100%; height: auto; }
+
+.doc-meta { color: #555; font-size: 10pt; margin-top: -6pt;
+            margin-bottom: 12pt; }
+.toc { background-color: #f7f7f7; border: 1px solid #ccc;
+       padding: 10pt 14pt; margin: 16pt 0 24pt; font-size: 10.5pt; }
+.toc h2 { font-size: 12pt; margin-top: 0; margin-bottom: 6pt; border: none;
+          color: #333; }
+.toc ul { margin: 0; padding-left: 20pt; }
+.toc li { margin-bottom: 2pt; }
+.toc a { color: #1e3a8a; }
+
+@media print {
+  body { margin: 0.75in; }
+  pre, table, div.note, div.important { page-break-inside: avoid; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+</style>
+</head>
+<body>
+<h1>Voorhees 2.5.0</h1>
+<div class="toc">
+<h2>Contents</h2>
+<ul>
+  <li><a href="#what-it-is">What it is</a></li>
+  <li><a href="#file-formats">File formats</a></li>
+  <li><a href="#requirements">Requirements</a></li>
+  <li><a href="#building-from-source">Building from source</a></li>
+  <li><a href="#running">Running</a></li>
+  <li><a href="#using-the-editor">Using the editor</a></li>
+  <li><a href="#how-tohellip">How to&hellip;</a></li>
+  <li><a href="#command-line">Command line</a></li>
+  <li><a href="#explorer-integration">Explorer integration</a></li>
+  <li><a href="#settings">Settings</a></li>
+  <li><a href="#source-overview">Source overview</a></li>
+  <li><a href="#license">License</a></li>
+</ul>
+</div>
+<p><strong>A hierarchical editor for JSON, INI, Klipper-family config and registry (.reg) files, for Windows.</strong>
+(&ldquo;Jason&rdquo; Voorhees; JSON. Get it?)</p>
+<p><em>&ldquo;This JSON app is a real killer.&rdquo;</em></p>
+<p>Copyright (c) 2026 B. C. Services. Licensed under the GNU General Public License, version 2 or (at your option) any later version &ndash; see <a href="LICENSE">LICENSE</a> and <a href="GPL-2.0.txt">GPL-2.0.txt</a>.</p>
+<hr />
+<h2 id="what-it-is">What it is</h2>
+<p>Voorhees opens a structured text file as a <strong>tree</strong> on the left, with an <strong>edit panel</strong> on the right for the selected entry. It is built around one promise: <strong>your file stays your file.</strong> Loading and saving a file without editing it writes back exactly the same bytes &ndash; every space, comment, line ending, encoding and byte order mark kept &ndash; and an edit changes only the text it touches. Undo all the way back and the file is byte-for-byte the original again.</p>
+<p>It is a single, self-contained <code>Voorhees.exe</code> (WinForms, C# 5) with no installer and no dependencies beyond the .NET Framework 4.x that ships with Windows.</p>
+<h2 id="file-formats">File formats</h2>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Opened by name</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JSON</strong> (and JSONC: <code>//</code> and <code>/* */</code> comments)</td>
+<td><code>.json</code>, <code>.jsonc</code></td>
+<td>Objects and arrays as branches, values with their types (string, number, boolean, null). Strict: a file that is not valid JSON is refused with the line and column.</td>
+</tr>
+<tr>
+<td><strong>INI</strong></td>
+<td><code>.ini</code>, <code>.inf</code></td>
+<td>Sections at the top level with their keys; keys before the first section; <code>;</code> / <code>#</code> comment lines. Keys and section names compare without case, as Windows does.</td>
+</tr>
+<tr>
+<td><strong>Klipper</strong> printer configs</td>
+<td><code>.cfg</code></td>
+<td>Sections, options (<code>:</code> or <code>=</code>), inline comments, multi-line G-code macros, <code>[include ...]</code> lines (right-click &gt; Open Included File) and the <code>SAVE_CONFIG</code> block Klipper writes at the end.</td>
+</tr>
+<tr>
+<td><strong>Moonraker</strong> configs</td>
+<td><code>moonraker.conf</code>, other <code>.conf</code></td>
+<td>As Klipper, with Moonraker&rsquo;s rules (inline comments after spaces, <code>\#</code> / <code>\;</code> escapes).</td>
+</tr>
+<tr>
+<td><strong>KlipperScreen</strong> configs</td>
+<td><code>KlipperScreen.conf</code></td>
+<td>As Klipper, with KlipperScreen&rsquo;s rules and its <code>#~#</code> auto-saved block.</td>
+</tr>
+<tr>
+<td><strong>Registry files</strong></td>
+<td><code>.reg</code></td>
+<td>Keys as a flat list of full paths (<code>[HKEY_...]</code>, <code>[-HKEY_...]</code> to delete), typed values: strings, expandable strings, multi-strings, DWORD and QWORD (shown in hex and decimal), binary. Saved in regedit&rsquo;s own forms, long hex values wrapped as regedit wraps them. New .reg files are UTF-16 with a byte order mark, as regedit writes them. Voorhees never imports a .reg into the registry.</td>
+</tr>
+</tbody>
+</table>
+<p>A file with no telling name is recognised by its contents. <strong>File &gt; Reopen As</strong> reads the current file again as another format, and the Open dialog can force a format.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li><strong>Windows</strong> 7 SP1 or later (Windows 10 / 11 recommended).</li>
+<li><strong>.NET Framework 4.x</strong> (4.5 or later) &ndash; part of every current Windows. Nothing else.</li>
+</ul>
+<h2 id="building-from-source">Building from source</h2>
+<p>Everything needed is in this folder:</p>
+<pre><code>compile.bat           the build script
+src\                  the C# source (every file is listed in compile.bat)
+src\lib\              the progress dialog
+res\Voorhees.ico      the program icon (embedded in the exe)
+LICENSE, GPL-2.0.txt  the license
+README.md             this file
+</code></pre>
+<p>To build, run <code>compile.bat</code> &ndash; double-click it, or from a command prompt:</p>
+<pre><code>compile.bat            release build (the default)
+compile.bat DEBUG      debug build (also writes Voorhees.pdb)
+</code></pre>
+<p>The script uses the C# compiler that comes with the .NET Framework (<code>%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\csc.exe</code>, or the 32-bit one); no Visual Studio, MSBuild or NuGet is needed. Every path is relative to the script&rsquo;s own folder, so it works from anywhere, and <strong><code>Voorhees.exe</code> is written into the same folder as <code>compile.bat</code></strong>. The version is fixed in <code>src\Version.cs</code> (2.5.0).</p>
+<h2 id="running">Running</h2>
+<p>Run <code>Voorhees.exe</code>, then open a file from the File menu, by dragging it onto the window, or by naming it on the command line: <code>Voorhees.exe settings.ini</code>. There is nothing to install; the program keeps its settings in the registry (below).</p>
+<h2 id="using-the-editor">Using the editor</h2>
+<p><strong>The tree.</strong> Each entry is labelled <code>key: value</code> (<code>key = value</code> in INI and .reg files); containers show their name in brackets (<code>{object}</code>, <code>[array]</code>, <code>[section]</code>, <code>[HKEY_...]</code>). Comment entries show in grey as <code>comment: words</code>, and a comment at the end of an entry&rsquo;s line shows as a grey tail after it. A key that appears more than once in the same place is shown in red with <code>(duplicate)</code> &ndash; Voorhees keeps such files as they are, warns when it opens one, and never creates a new duplicate itself.</p>
+<p><strong>The edit panel</strong> shows the selected entry: <strong>Key</strong>, <strong>Type</strong>, <strong>Value</strong> (a checkbox for booleans), <strong>Comment</strong> (the comment on the entry&rsquo;s line) and <strong>Raw</strong> &ndash; the entry&rsquo;s text exactly as it is in the file, which you can edit directly for anything the other fields cannot express. Press <strong>Save</strong> (or Discard) to apply panel changes.</p>
+<p><strong>In-place editing:</strong> double-click an entry or press <strong>F2</strong> to edit its value right in the tree.</p>
+<p><strong>Right-click</strong> an entry for: Add Child (each type, or a comment), Add Top-Level, Rename Key, Copy, Paste, Delete &ndash; and Open Included File on a Klipper <code>[include]</code>. Adding or renaming a registry key asks for the hive from a drop-down and the path under it. <strong>Shift+F10</strong> opens the menu from the keyboard.</p>
+<p><strong>Menus:</strong>
+- <strong>File</strong> &ndash; New (Ctrl+N), New As (a document of any format), Open (Ctrl+O), Reopen As, Close (Ctrl+W), Save (Ctrl+S), Save As (Ctrl+Shift+S), Exit.
+- <strong>Edit</strong> &ndash; Undo (Ctrl+Z) and Redo (Ctrl+Y), back to the last save.
+- <strong>Search</strong> &ndash; Find (Ctrl+F) and Find + Replace (Ctrl+H) across keys, values and comments; Replace All is a single undo step.
+- <strong>View</strong> &ndash; Font Size (Ctrl++, Ctrl+-, Ctrl+0), Show Raw Text in Tree, <strong>Color Keys</strong> (names coloured by kind and values by type), <strong>Colors&hellip;</strong> (choose those colours; each row has a preview).
+- <strong>Tools</strong> &ndash; Register Explorer Context Menu, Set Voorhees as Default&hellip;, Unregister Explorer Context Menu.
+- <strong>Help</strong> &ndash; About Voorhees.</p>
+<p><strong>Comments</strong> are kept wherever they are. Adding the first comment to a plain JSON file warns once that it is now JSONC (JSON with comments); editing inside a Klipper <code>SAVE_CONFIG</code> block warns once that Klipper rewrites that block.</p>
+<p>Anything that takes more than a moment (opening a very large file, Replace All) shows a progress window.</p>
+<h2 id="how-tohellip">How to&hellip;</h2>
+<p><strong>Open a file.</strong> File &gt; Open (Ctrl+O), drag it onto the window, or right-click it in Explorer &gt; Edit with Voorhees (once registered). The status bar shows the format it was read as. If that is wrong &ndash; a Klipper file opened as Moonraker, say &ndash; use File &gt; Reopen As and pick the right one.</p>
+<p><strong>Change a value.</strong> Select the entry, then either double-click it (or press F2) and type the new value in place, Enter to keep it and Escape to cancel; or type in the panel&rsquo;s Value box and press Save. A value keeps its type: a JSON number stays a number, a registry DWORD accepts <code>0x1f</code> or <code>31</code>. If the text is not valid for the type, Voorhees says why and changes nothing.</p>
+<p><strong>Change a type.</strong> Pick another entry in the Type box (for example String to Number in JSON, or Text to Key Only in INI), adjust the value, and press Save.</p>
+<p><strong>Rename a key.</strong> Right-click &gt; Rename Key, or edit the panel&rsquo;s Key box and press Save. A name the container already has is refused, so renaming never creates a duplicate.</p>
+<p><strong>Add something.</strong> Right-click the container (an object, a section, a registry key) &gt; Add Child, and choose the kind; the new entry gets a free placeholder name (<code>newKey</code>, <code>new_option</code>, <code>NewValue</code> &hellip;) with the Key box ready to type over. Right-click any top-level entry, or empty space below the tree, for Add Top-Level (a new INI or Klipper section, a registry key, a Klipper include). New registry keys ask for the hive and the path first; new includes ask for the file.</p>
+<p><strong>Add or edit a comment.</strong> For a comment on an entry&rsquo;s own line, type in the panel&rsquo;s Comment box and press Save (clear it to remove the comment). For a comment on a line of its own, right-click &gt; Add Child &gt; Comment&hellip; (or Add Top-Level &gt; Comment&hellip;). Comment entries are edited like values: double-click, or the Value box.</p>
+<p><strong>Edit the raw text.</strong> The panel&rsquo;s Raw box shows the selected entry exactly as it is in the file &ndash; key, spacing, value, comments. Edit it and press Save to replace the entry with your text, for anything the other fields cannot express (an unusual layout, a comment in an odd place). It must still be one valid entry of the same shape; if not, Voorhees shows the line and column of the problem. View &gt; Show Raw Text in Tree shows every entry&rsquo;s raw first line in the tree itself.</p>
+<p><strong>Move or copy an entry.</strong> Right-click &gt; Copy, then right-click the destination container &gt; Paste; a pasted key that is already taken there gets a free variant. Single values and comments can also be pasted between documents of different formats (a JSON string becomes INI text, and so on); whole objects and sections cannot.</p>
+<p><strong>Find and replace.</strong> Search &gt; Find (Ctrl+F) looks through keys, values and comments and selects each match in turn. Search &gt; Find + Replace (Ctrl+H) replaces one match at a time or all of them; Replace All is one step, so a single Undo takes it all back.</p>
+<p><strong>Undo.</strong> Edit &gt; Undo (Ctrl+Z) and Redo (Ctrl+Y), as far back as the last save. Undoing every edit returns the document to exactly the file as it was opened. While typing in a panel box, Ctrl+Z undoes the typing instead.</p>
+<p><strong>Save.</strong> File &gt; Save (Ctrl+S) writes the file in its own format, encoding and line endings. File &gt; Save As keeps the format; a file name whose extension belongs to another format asks first (converting between formats is not offered).</p>
+<p><strong>Check a file without opening the editor.</strong> <code>Voorhees --validate settings.ini</code> reports whether the file is valid in its format, with the line and column of the first problem, and warns about repeated keys; the exit code says the result (see below).</p>
+<p><strong>Colour the tree.</strong> View &gt; Color Keys turns the colours on; View &gt; Colors&hellip; chooses them: one for each kind of name (top-level sections and keys, nested containers, plain entries) and one for each type of value (text, numbers, true / false, no value, binary). Each row shows a sample; Reset restores the defaults (dark blue names, black values).</p>
+<h2 id="command-line">Command line</h2>
+<pre><code>Voorhees [--debug] [--format NAME] [file]
+                                         open the editor, optionally with a file
+Voorhees --validate file [--format NAME] [--verbose]
+                                         check that a file is valid in its format
+Voorhees --register [--verbose]          add &quot;Edit with Voorhees&quot; and Open With
+                                         for .json .ini .cfg .conf .reg
+Voorhees --set-default EXT[,EXT...] [--verbose]
+                                         make Voorhees the default for them
+Voorhees --unset-default EXT[,EXT...] [--verbose]
+                                         put their previous defaults back
+Voorhees --unregister [--verbose]        remove it all again
+Voorhees --version                       print the version
+Voorhees --help                          print this help
+
+Options:
+  --debug    write load, save and tree timings to
+             log\Voorhees_debug.log beside Voorhees.exe
+  --verbose  report success as well as failure
+  --format   read the file as json, ini, klipper, moonraker,
+             klipperscreen or reg; without it the format comes
+             from the file's name, else its contents
+
+Exit codes:
+  0  success
+  1  --validate: the file is not valid in its format
+  2  the command line could not be understood
+  3  the file could not be read
+  4  the registry could not be changed
+</code></pre>
+<h2 id="explorer-integration">Explorer integration</h2>
+<p><strong>Tools &gt; Register Explorer Context Menu</strong> (or <code>--register</code>) adds <strong>Edit with Voorhees</strong> to the right-click menu of <code>.json</code>, <code>.ini</code>, <code>.cfg</code>, <code>.conf</code> and <code>.reg</code> files, and Voorhees to their Open With lists. It changes no default program.</p>
+<p><strong>Tools &gt; Set Voorhees as Default&hellip;</strong> (or <code>--set-default</code>) chooses, per file type, whether double-clicking opens it in Voorhees; the previous default is remembered and put back when the box is cleared, by <code>--unset-default</code>, or by Unregister. (Making Voorhees the default for <code>.reg</code> means double-clicking a registry file opens it for editing instead of merging it.) On Windows 10 and 11 a default chosen in Settings &gt; Default apps still wins.</p>
+<p>All of this is written under <code>HKEY_CURRENT_USER\Software\Classes</code> only &ndash; no administrator rights are needed. <strong>Unregister</strong> removes it all.</p>
+<h2 id="settings">Settings</h2>
+<p>Voorhees remembers, under <code>HKEY_CURRENT_USER\Software\Voorhees</code>: the window&rsquo;s position and size, the splitter position, the font size, the Show Raw Text and Color Keys options, and the colours chosen in View &gt; Colors. Nothing else is stored anywhere.</p>
+<h2 id="source-overview">Source overview</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src\Voorhees.cs</code></td>
+<td>The program entry point (command line first), the main window and its dialogs, Explorer integration and settings.</td>
+</tr>
+<tr>
+<td><code>src\VoorheesDocument.cs</code></td>
+<td>The document model: entries with all their surrounding text, changes, undo and redo, search and replace, every editing action.</td>
+</tr>
+<tr>
+<td><code>src\VoorheesFormat.cs</code></td>
+<td>The format dispatcher: every format-dependent question, answered by the format&rsquo;s module.</td>
+</tr>
+<tr>
+<td><code>src\VoorheesText.cs</code></td>
+<td>File bytes to text and back: encodings, byte order marks, line endings.</td>
+</tr>
+<tr>
+<td><code>src\VoorheesJson.cs</code></td>
+<td>The lossless JSON reader and writer.</td>
+</tr>
+<tr>
+<td><code>src\VoorheesLines.cs</code></td>
+<td>The line engine shared by INI, the Klipper family and .reg files.</td>
+</tr>
+<tr>
+<td><code>src\VoorheesIni.cs</code>, <code>src\VoorheesCfg.cs</code>, <code>src\VoorheesReg.cs</code></td>
+<td>The INI, Klipper-family and registry-file rules.</td>
+</tr>
+<tr>
+<td><code>src\VoorheesTreeView.cs</code></td>
+<td>The tree control: built lazily, updated in place, labels drawn in colour runs.</td>
+</tr>
+<tr>
+<td><code>src\Version.cs</code></td>
+<td>The version string.</td>
+</tr>
+<tr>
+<td><code>src\lib\BusyModalForm.cs</code></td>
+<td>The progress window.</td>
+</tr>
+</tbody>
+</table>
+<p>The main window&rsquo;s class is <code>partial</code>, with a few partial-method hooks that let a separate test harness drive the editor in-process; the harness is not part of this release, and in a normal build the hooks compile to nothing.</p>
+<h2 id="license">License</h2>
+<p>Voorhees is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License or (at your option) any later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See <a href="LICENSE">LICENSE</a> and <a href="GPL-2.0.txt">GPL-2.0.txt</a>.</p>
+<p>Copyright (c) 2026 B. C. Services.</p>
+</body>
+</html>
